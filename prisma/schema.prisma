@@ -57,7 +57,7 @@ model Category {
   products     Product[]  @relation("product-category")
   sousCategory Category[] @relation("sous-category")
   Category     Category?  @relation("sous-category", fields: [categoryId], references: [id])
-  categoryId   Int
+  categoryId   Int?
 }
 
 model Command {
