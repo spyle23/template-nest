@@ -8,6 +8,5 @@ export type ProductArg = {
 
 export type CategoryArg = {
   name: string;
-  isCategory: boolean;
   categoryId?: number;
 };
