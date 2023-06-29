@@ -23,16 +23,16 @@ export class CategoryController {
   async createCategory(
     @Body() { name, categoryId }: CategoryArg,
   ): Promise<ResponseForm<Category>> {
-    const existedCategory = await this.categoryService.getCategory({
+    const existedCategory = categoryId ? await this.categoryService.getCategory({
       id: categoryId,
-    });
+    }) : null;
     const categoryCreateInput: Prisma.CategoryCreateInput = existedCategory
       ? {
           name,
-          isCategory: true,
+          isCategory: false,
           Category: { connect: { id: existedCategory.id } },
         }
-      : { name, isCategory: false };
+      : { name, isCategory: true };
     const cat = await this.categoryService.createCategory(categoryCreateInput);
     const response: ResponseForm<Category> = {
       success: true,
