@@ -3,9 +3,10 @@ import { ApiController } from './api.controller';
 import { CommandModule } from './command/command.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [CommandModule, ProductModule, CategoryModule],
+  imports: [CommandModule, ProductModule, CategoryModule, AuthModule],
   controllers: [ApiController],
 })
 export class ApiModule {}
