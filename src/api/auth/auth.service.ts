@@ -7,7 +7,7 @@ import { SignupArg, UserWithToken } from 'src/types/auth';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async signup(data: SignupArg): Promise<UserWithToken | null> {
     const { email, name, isAdmin, adress, password } = data;
