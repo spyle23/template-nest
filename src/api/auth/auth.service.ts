@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Auth, Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import Bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { hashSync, compareSync } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 import { SignupArg, UserWithToken } from 'src/types/auth';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async signup(data: SignupArg): Promise<UserWithToken | null> {
     const { email, name, isAdmin, adress, password } = data;
@@ -17,7 +17,7 @@ export class AuthService {
       },
     });
     if (searchAuth) return null;
-    const hashPwd = Bcrypt.hashSync(password, 10);
+    const hashPwd = hashSync(password, 10);
     const newAuth: Auth = await this.prisma.auth.create({
       data: {
         email,
@@ -36,18 +36,7 @@ export class AuthService {
         },
       },
     });
-    await this.prisma.auth.update({
-      where: {
-        email,
-      },
-      data: {
-        ...newAuth,
-        User: {
-          create: newUser,
-        },
-      },
-    });
-    const token = jwt.sign(
+    const token = sign(
       { email, isAdmin, password },
       process.env.JWT_SECRET_KEY as string,
       { expiresIn: '24h' },
@@ -67,9 +56,9 @@ export class AuthService {
     });
     if (!existedAuth) return null;
     if (!existedAuth.User) return null;
-    const valid = Bcrypt.compareSync(password, existedAuth.password);
+    const valid = compareSync(password, existedAuth.password);
     if (!valid) return null;
-    const token = jwt.sign(
+    const token = sign(
       { email, isAdmin: existedAuth.User?.isAdmin, password },
       process.env.JWT_SECRET_KEY as string,
       { expiresIn: '24h' },
