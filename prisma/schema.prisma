@@ -57,6 +57,8 @@ model Ticket {
   userId       Int?
   Bus          Bus?           @relation(fields: [busId], references: [id])
   busId        Int?
+  qrCode       QrCode         @relation(fields: [qrCodeId], references: [id])
+  qrCodeId     Int            @unique
 }
 
 model Notification {
@@ -64,10 +66,10 @@ model Notification {
   isAdmin Boolean
   entity  Entity
 
-  User      User?   @relation(fields: [userId], references: [id])
-  userId    Int?
-  Ticket    Ticket? @relation(fields: [ticketId], references: [id])
-  ticketId  Int?
+  User     User?   @relation(fields: [userId], references: [id])
+  userId   Int?
+  Ticket   Ticket? @relation(fields: [ticketId], references: [id])
+  ticketId Int?
 }
 
 model QrCode {
@@ -75,6 +77,7 @@ model QrCode {
   qrPath    String
   startDate DateTime @default(now())
   endDate   DateTime
+  Ticket    Ticket?
 }
 
 model Bus {
