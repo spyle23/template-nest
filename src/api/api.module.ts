@@ -10,9 +10,10 @@ import { LoggerMiddleware } from 'src/logger/logger.middleware';
 import { QrcodeService } from './qrcode/qrcode.service';
 import { QrcodeModule } from './qrcode/qrcode.module';
 import { BusModule } from './bus/bus.module';
+import { TicketsModule } from './tickets/tickets.module';
 
 @Module({
-  imports: [AuthModule, QrcodeModule, BusModule],
+  imports: [AuthModule, QrcodeModule, BusModule, TicketsModule],
   controllers: [ApiController],
   providers: [QrcodeService],
 })
