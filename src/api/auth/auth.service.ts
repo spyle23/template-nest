@@ -10,7 +10,7 @@ export class AuthService {
   constructor(private prisma: PrismaService) {}
 
   async signup(data: SignupArg): Promise<UserWithToken | null> {
-    const { email, name, isAdmin, adress, password } = data;
+    const { email, name, userType, adress, password } = data;
     const searchAuth: Auth | null = await this.prisma.auth.findUnique({
       where: {
         email,
@@ -27,7 +27,7 @@ export class AuthService {
     const newUser: User = await this.prisma.user.create({
       data: {
         name,
-        isAdmin,
+        userType,
         adress,
         auth: {
           connect: {
@@ -37,11 +37,11 @@ export class AuthService {
       },
     });
     const token = sign(
-      { email, isAdmin, password },
+      { userId: newUser.id ,email, userType, password },
       process.env.JWT_SECRET_KEY as string,
       { expiresIn: '24h' },
     );
-    return { name, isAdmin, adress, token } as UserWithToken;
+    return { name, userType, adress, token } as UserWithToken;
   }
 
   async signin(data: Prisma.AuthCreateInput): Promise<UserWithToken | null> {
@@ -59,13 +59,13 @@ export class AuthService {
     const valid = compareSync(password, existedAuth.password);
     if (!valid) return null;
     const token = sign(
-      { email, isAdmin: existedAuth.User?.isAdmin, password },
+      { email, userType: existedAuth.User.userType, password },
       process.env.JWT_SECRET_KEY as string,
       { expiresIn: '24h' },
     );
     return {
       name: existedAuth.User.name,
-      isAdmin: existedAuth.User.isAdmin,
+      userType: existedAuth.User.userType,
       adress: existedAuth.User.adress,
       token,
     };

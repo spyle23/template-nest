@@ -1,10 +1,11 @@
 import { Body, Controller, Post, Request as NestRequest } from '@nestjs/common';
-import { Prisma, Ticket, TicketType } from '@prisma/client';
+import { Prisma, QrCode, Ticket, TicketType } from '@prisma/client';
 import { TicketsService } from './tickets.service';
 import { ResponseForm } from 'src/types/response';
 import { Request } from 'express';
 import { CustomRequest } from 'src/logger/logger.middleware';
 import { TicketArg } from 'src/types/ticket';
+import { InfoQR } from 'src/qrcode';
 
 const checkType = (startDate: Date,param: TicketType): Date => {
   const result = new Date(startDate);
@@ -34,5 +35,17 @@ export class TicketsController {
       data,
     };
     return response;
+  }
+
+  @Post('check')
+  async check(@Body() body: InfoQR, @NestRequest() req: CustomRequest) {
+    const data = {...body, driverId: req.user.userId}
+     const res = await this.ticketService.checkQr(data);
+     const response: ResponseForm<QrCode | null> = {
+      success: res ? true: false,
+      message: res ? 'qr valid': 'qr invalid',
+      data: res
+     }
+     return response;
   }
 }

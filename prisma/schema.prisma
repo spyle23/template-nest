@@ -26,6 +26,12 @@ enum TicketType {
   MOIS
 }
 
+enum UserType {
+  DRIVER
+  STUDENT
+  ADMIN
+}
+
 model Auth {
   id       Int    @id @default(autoincrement())
   email    String @unique
@@ -37,11 +43,12 @@ model User {
   id           Int            @id @default(autoincrement())
   name         String
   adress       String
-  isAdmin      Boolean
+  userType     UserType
   notification Notification[]
   ticket       Ticket[]
   auth         Auth           @relation(fields: [authId], references: [id])
   authId       Int            @unique
+  Bus          Bus?
 }
 
 model Ticket {
@@ -98,6 +105,8 @@ model Bus {
   longitude     Float
   BusTarget     BusTarget? @relation(fields: [busTargetId], references: [id])
   busTargetId   Int?
+  driver        User       @relation(fields: [driverId], references: [id])
+  driverId        Int        @unique
 }
 
 model Target {
