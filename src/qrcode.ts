@@ -15,10 +15,11 @@ export type InfoQR = {
 }
 
 export const generateQRCode = async (
-    url: string
+    info: InfoQR
 ): Promise<{ url?: string; error?: string }> => {
     const uri = await new Promise((resolve: (value: string) => void, reject) => {
-        QRCode.toDataURL(url, function (err: Error, base64: string) {
+        const infoQr = JSON.stringify(info);
+        QRCode.toDataURL(infoQr, function (err: Error, base64: string) {
             resolve(base64)
             reject(err)
         })
