@@ -10,8 +10,9 @@ enum QRENUM {
 }
 
 export type InfoQR = {
-    busId: number;
-    qrType: QRENUM
+    ticketId: number;
+    isReservation: boolean;
+    qrType: QRENUM;
 }
 
 export const generateQRCode = async (

@@ -55,10 +55,18 @@ model Ticket {
   ticketType   TicketType
   User         User?          @relation(fields: [userId], references: [id])
   userId       Int?
-  Bus          Bus?           @relation(fields: [busId], references: [id])
-  busId        Int?
-  qrCode       QrCode        @relation(fields: [qrCodeId], references: [id])
+  qrCode       QrCode         @relation(fields: [qrCodeId], references: [id])
   qrCodeId     Int            @unique
+  BusTarget    BusTarget?     @relation(fields: [busTargetId], references: [id])
+  busTargetId  Int?
+}
+
+model BusTarget {
+  id     Int      @id @default(autoincrement())
+  name   String
+  bus    Bus[]
+  target Target[]
+  ticket Ticket[]
 }
 
 model Notification {
@@ -81,20 +89,22 @@ model QrCode {
 }
 
 model Bus {
-  id            Int      @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   nbReservation Int
   nbPlace       Int
+  status        Boolean
   latitude      Float
   longitude     Float
-  target        Target[]
-  ticket        Ticket[]
+  BusTarget     BusTarget? @relation(fields: [busTargetId], references: [id])
+  busTargetId   Int?
 }
 
 model Target {
-  id        Int    @id @default(autoincrement())
-  name      String
-  latitude  Float
-  longitude Float
-  Bus       Bus?   @relation(fields: [busId], references: [id])
-  busId     Int?
+  id          Int        @id @default(autoincrement())
+  name        String
+  latitude    Float
+  longitude   Float
+  busId       Int?
+  BusTarget   BusTarget? @relation(fields: [busTargetId], references: [id])
+  busTargetId Int?
 }
