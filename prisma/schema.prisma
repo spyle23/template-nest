@@ -85,6 +85,7 @@ model QrCode {
   qrPath    String
   startDate DateTime @default(now())
   endDate   DateTime
+  key       String   @unique
   Ticket    Ticket?
 }
 

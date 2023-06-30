@@ -1,18 +1,19 @@
 
-import QRCode from "qrcode"
+import * as QRCode from "qrcode"
 import { generateFile } from "./generateFile";
 
-enum QRENUM {
-    UNIQUE = "0",
-    JOUR = "1",
-    SEMAINE = "7",
-    MOIS = "31"
+export enum QRENUM {
+    UNIQUE = "UNIQUE",
+    JOUR = "JOUR",
+    SEMAINE = "SEMAINE",
+    MOIS = "MOIS"
 }
 
 export type InfoQR = {
-    ticketId: number;
-    isReservation: boolean;
+    useremail: string;
+    busid?: number;
     qrType: QRENUM;
+    key: string;
 }
 
 export const generateQRCode = async (
@@ -29,7 +30,7 @@ export const generateQRCode = async (
         const qrcode = await generateFile({
             key: new Date().toString(),
             body: uri,
-            type: "image/png"
+            type: "png"
         })
         return { url: qrcode }
     }
