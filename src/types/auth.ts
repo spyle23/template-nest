@@ -1,7 +1,9 @@
+import { UserType } from "@prisma/client";
+
 export type UserWithToken = {
   name: string;
   adress: string;
-  isAdmin: boolean;
+  userType: UserType;
   token: string;
 };
 
@@ -12,6 +14,6 @@ export type SigninArg = {
 
 export type SignupArg = {
   name: string;
-  isAdmin: boolean;
+  userType: UserType;
   adress: string;
 } & SigninArg;
