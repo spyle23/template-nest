@@ -6,19 +6,15 @@ import {
   Param,
   Post,
   Put,
-  UploadedFile,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from '@prisma/client';
 import { ProductArg } from 'src/types/product';
 import { ResponseForm } from 'src/types/response';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as fs from 'fs';
-import path from 'path';
 @Controller('api/product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
   @Get()
   async getAllProduct(): Promise<ResponseForm<Product[]>> {
@@ -44,24 +40,6 @@ export class ProductController {
       data: products,
     };
     return response;
-  }
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const type = file.mimetype.split("/")[1];
-    const filePath = path.join(path.resolve(__dirname), `/uploads/${file.originalname}.${type}`);
-    return new Promise<string>((resolve, reject) => {
-
-      fs.writeFile(filePath, file.buffer, "base64", (err) => {
-        if (err) {
-          console.log("err: ", err);
-          reject(err);
-        } else {
-          resolve(`uploads/${file.originalname}.${type}`);
-        }
-      });
-    })
   }
 
   @Post()

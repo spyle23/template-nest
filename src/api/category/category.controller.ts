@@ -23,9 +23,11 @@ export class CategoryController {
   async createCategory(
     @Body() { name, categoryId }: CategoryArg,
   ): Promise<ResponseForm<Category>> {
-    const existedCategory = categoryId ? await this.categoryService.getCategory({
-      id: categoryId,
-    }) : null;
+    const existedCategory = categoryId
+      ? await this.categoryService.getCategory({
+          id: categoryId,
+        })
+      : null;
     const categoryCreateInput: Prisma.CategoryCreateInput = existedCategory
       ? {
           name,
