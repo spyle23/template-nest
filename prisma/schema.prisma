@@ -57,7 +57,7 @@ model Ticket {
   userId       Int?
   Bus          Bus?           @relation(fields: [busId], references: [id])
   busId        Int?
-  qrCode       QrCode         @relation(fields: [qrCodeId], references: [id])
+  qrCode       QrCode        @relation(fields: [qrCodeId], references: [id])
   qrCodeId     Int            @unique
 }
 
