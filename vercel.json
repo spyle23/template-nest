@@ -3,7 +3,7 @@
     "builds": [
         {
             "src": "package.json",
-            "use": "yarn start:dev"
+            "use": "yarn nest start --watch"
         }
     ],
     "routes": [
